@@ -38,7 +38,7 @@ The dataset includes the following columns:
 | `Transaction Type`                 | Type of transaction — e.g., Transfer, Deposit, Withdrawal.                  |
 | `Timestamp`                        | Exact time the transaction occurred (within the one-hour window).           |
 | `Transaction Status`               | Outcome of the transaction (e.g., Success, Failed).                         |
-| `Fraud Flag`                       | Indicates whether the transaction was flagged as fraudulent (Yes/No).       |
+| `Fraud Flag`                       | Indicates whether the transaction was flagged as fraudulent (TRUE/FALSE).       |
 | `Geolocation (Latitude/Longitude)` | Geographic coordinates where the transaction was initiated.                 |
 | `Device Used`                      | Device or channel used (e.g., Mobile, ATM, Web).                            |
 | `Network Slice ID`                 | ID of the 5G network slice through which the transaction was transmitted.   |
@@ -54,7 +54,18 @@ The dataset includes the following columns:
 
 ---
 
-## **5. Skills Demonstrated**
+## **5.Data Transformation**
+
+The bank transaction dataset required transformations to prepare it for analysis. Here are the key changes made:
+
+* Split the "Longitude" and "Latitude" to enable map visualization.
+* Duplicated and split the "Timestamp" column into "Transaction Date" and "Transaction Time" for clarity.
+
+<img width="960" alt="data transformation" src="https://github.com/user-attachments/assets/ca014505-6284-4965-9faf-36550bc31a13" />
+
+---
+
+## **6. Skills Demonstrated**
 
 * **Fraud Pattern Recognition**: Identifying minute-level spikes and recurring conditions behind fraud.
 * **Time-Based Analysis**: Comparing fraud volumes across timestamps within a constrained 60-minute window.
@@ -64,18 +75,125 @@ The dataset includes the following columns:
 
 ---
 
-## **6. Conclusion and Recommendation**
+### A. Transaction Patterns (Within One Hour)
 
-### **Conclusion**
+<img width="801" alt="home page" src="https://github.com/user-attachments/assets/2d9e326e-66c7-436b-b337-67ab5324966c" />
 
-The analysis revealed that fraudulent transactions are **highly time-sensitive**, with major spikes occurring at **10:55 a.m., 10:05 a.m., and 10:49 a.m.**. These fraud events coincide with specific transaction types—**Transfers and Withdrawals**—and are often associated with certain network conditions (e.g., similar latency and bandwidth patterns). While **some fraud events occur consistently**, the majority emerge in **sudden bursts**, indicating **coordinated, rapid-fire activity**.
 
-### **Recommendation**
+To understand the overall transaction activity during this specific hour, we can examine several key dimensions:
 
-* **Implement Minute-Level Monitoring**: Real-time dashboards should be set to flag abnormal volumes within short intervals (e.g., per 5-minute segment).
-* **Correlate Network Metrics with Risk Models**: Transaction monitoring systems should factor in **network slice behavior**, latency, and bandwidth when evaluating risk.
-* **Enhance Verification for High-Risk Windows**: Reinforce authentication protocols (e.g., 2FA or biometric confirmation) during previously observed high-risk minutes (10:49–10:56 a.m.).
-* **Train AI models on Micro-Windows**: Use findings to train machine learning models that detect and predict bursts of fraud based on second/minute patterns and contextual features.
+**i. Which regions processed the most transactions?**
+
+The geographical distribution of transactions reveals that **Northwest Africa** and **Western Europe** experienced a higher volume of transactions compared to other regions during this hour, as indicated by the size and intensity of the markers on the map.
+
+**ii. Which time intervals within the hour had the most activity?**
+
+Analyzing the transaction volume over time shows significant activity between **10:00 AM** and **10:25 AM**, with a notable **peak** of **25** transactions occurring around **10:25 AM**. However, the **highest** number of transactions recorded within this hour was **28**, occurring at approximately **10:55 AM**.
+
+**iii. What is the distribution of transaction statuses (e.g., success vs. failed)?**
+
+The transaction status breakdown indicates a near balance between outcomes within this hour. There were a total of **513 failed transactions** and **487 successful transactions**. This relatively high number of failed transactions warrants further investigation.
+
+**iv. Are certain transaction types more common or rare?**
+
+Examining the types of transactions reveals that **Transfer** transactions were the most prevalent, accounting for **37.84%** of all transactions. This was closely followed by **Deposits at 32.68%**, while **Withdrawals** were the least common at **29.48%**. The dominance of *transfer* transactions could be a significant factor to consider in further analysis.
+
+
+### B. Fraud Detection: Analyzing Flagged Transactions
+
+<img width="801" alt="fraud detection" src="https://github.com/user-attachments/assets/7274f095-b280-42ef-81cc-d25ece225abd" />
+
+
+This section delves into the characteristics of the transactions identified as potentially fraudulent within the one-hour period.
+
+**i. What percentage of transactions were flagged as fraud overall?**
+
+Out of the **1,000** total transactions recorded during this hour, **481(48.1%) transactions were flagged as fraudulent**, representing a significant portion of the activity. These fraudulent transactions amounted to a total value of **378.86K**.
+
+**ii. Which regions have the highest fraud flag rate?**
+
+The geographical distribution of flagged transactions indicates that **Northwest Africa, Western Europe, and South East Asia experienced a higher concentration of potentially fraudulent activity** during this hour, as evidenced by the clustering of points in these regions on the map.
+
+**iii. Do specific transaction types or statuses correlate with fraud?**
+
+Analyzing the breakdown of fraudulent transactions by type reveals that **Transfers** accounted for the **highest percentage** of fraudulent activity at **35.73%**, followed closely by **Deposits at 34.33%**. **Withdrawals** had the **lowest percentage** of fraudulent transactions at **29.94%.**
+
+Further examining the status of these fraudulent transactions:
+
+* Among the **successful transactions** that were flagged as fraud (totaling **231 with a value of 182.94K)**, **Transfers** again led at **39.59%**, followed by **Deposits at 32.54%**, and **Withdrawals at 27.87%.**
+* For the **failed transactions** that were flagged as fraud (totaling **250 with a value of 195.92K)**, **Deposits** had the **highest percentage at 36%**, followed by **Transfers at 32.13%**, and **Withdrawals at 31.87%.**
+
+This suggests that while transfers are generally more prone to being flagged as fraudulent when successful, deposits show a higher rate of being flagged as fraudulent when they fail, potentially due to detection mechanisms at play.
+
+**iv. Are fraud-flagged transactions more common in certain network slices or bandwidth levels?**
+
+* **By Bandwidth**:
+  * Fraudulent activity was highest within the **150–250 Mbps bandwidth range**, accounting for **228 fraudulent transactions** in total.
+    * **Failed**: 111
+    * **Successful**: 117
+
+* **By Network Slice**:
+  * **Slice 2** was the most affected, with **173 fraudulent transactions**.
+    * **Failed**: 92
+    * **Successful**: 81
+
+This indicates certain infrastructure layers (like **Slice 2** or bandwidth range **150–250 Mbps**) may be more vulnerable or less monitored, making them preferred channels for fraud. 
+
+
+**C. Time-Sensitive Anomalies**
+
+To understand the temporal patterns of fraudulent activity within this critical hour, we can analyze when these incidents occurred and if they correlate with specific transaction types.
+
+**i. At what minute or period in the hour did most frauds occur?**
+
+The **peak** of fraudulent activity within this hour was observed at **10:55 AM, with 15 fraudulent transactions** taking place. Interestingly, **10:05 AM** recorded the **second-highest** number of **fraudulent transactions with 14 incidents**, followed by **10:49 AM** with **12**. In contrast, the **least** fraudulent activity occurred at **10:28 AM**, with only **2 transactions.**
+
+**ii. Are there any spikes in fraud that coincide with spikes in certain transaction types?**
+
+Examining the temporal distribution of fraudulent transactions by type reveals the following:
+
+  * **Transfers:** Fraudulent transfer transactions experienced notable spikes at **10:23 AM, 10:49 AM, and 10:56 AM**, with **7 transactions** occurring at each of these times.
+  
+  * **Deposits:** The highest spike in fraudulent deposit transactions occurred at **10:51 AM, with 7 transactions**. Other notable peaks were at **10:38 AM and 10:16 AM**, both recording 6 fraudulent deposit transactions.
+
+  * **Withdrawals:** Fraudulent withdrawal transactions showed more frequent, albeit smaller, spikes. The highest occurrences were at **10:17 AM, 10:25 AM, 10:50 AM, and 10:56 AM**, each with **5 fraudulent transactions.**
+
+**iii. Does fraud occur consistently or suddenly?**
+
+The data suggests that fraudulent activity within this hour was **not consistent but rather occurred in distinct bursts or spikes**. The significant peaks at specific minutes, particularly **(10:49–10:56 a.m.)**, and the varying spike times for different transaction types indicate **periods of concentrated fraudulent activity** rather than a steady stream throughout the hour. This pattern of sudden increases could suggest coordinated attempts or the exploitation of temporary vulnerabilities.
+
+
+## **6. Conclusion and Recommendations**
+
+## **Conclusion**
+
+This one-hour snapshot of transactional activity on **17th January 2025** offers a concentrated view into the dynamic landscape of real-time banking operations. Out of **1,000** transactions, nearly **half (48.1%) were flagged as fraudulent** indicating a significant exposure to risk within just 60 minutes. Patterns emerged across **regions**, **transaction types**, **network slices**, and **bandwidth levels**, highlighting concentrations of fraudulent activity in **Northwest Africa, Western Europe, and South Asia**.
+
+Transfers were the most frequently exploited transaction type in fraud cases, especially among successful transactions. Spikes in fraudulent activity aligned with specific minutes in the hour suggesting deliberate, time-targeted actions. Additionally, **Network Slice 2** and **bandwidths between 150–250 Mbps** surfaced as common attributes in fraudulent behavior.
+
+These insights, though limited to a short timeframe, emphasize how even a small window of real-time data can reveal concentrated fraud patterns when observed through the right analytical lens.
 
 ---
 
+## **Recommendations**
+
+1. **Implement Real-Time Monitoring Rules**
+   Trigger alerts for spikes in transaction volume or fraud-prone activity during narrow time intervals (e.g., minute-by-minute analysis during peak fraud periods).
+
+2. **Strengthen Controls on Transfers and Deposits**
+   Since these were most exploited, especially during successful fraud, additional verification layers or delays for high-risk types may be effective.
+
+3. **Geo-Targeted Fraud Prevention**
+   Allocate more fraud detection resources to high-risk regions such as **Northwest Africa**, **Western Europe**, and **South Asia** based on observed clusters.
+
+4. **Optimize Network Slice Security**
+   Investigate and fortify **Network Slice 2**, which experienced the highest fraudulent activity—consider behavioral modeling or micro-segmentation.
+
+5. **Bandwidth Sensitivity Settings**
+   Pay closer attention to bandwidth levels of **150–250 Mbps** when configuring anomaly detection algorithms or thresholds.
+
+6. **Expand Data Logging for Longer Analysis**
+   To better understand patterns over time, integrate continuous logging to enable comparisons and track evolving trends.
+
+---
+This project was inspired by https://www.youtube.com/@DataChy
