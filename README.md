@@ -1,4 +1,5 @@
 # 60-Minutes-of-Risk-Real-Time-Insights-from-One-Hour-of-Bank-Transactions.
+![20250508_2340_Bank Transactions Report_simple_compose_01jtrsy87pe2yvv696dnqh43cw](https://github.com/user-attachments/assets/9a89ccd3-58df-44de-a3d6-11246de6af0b)
 
 ## **1. Introduction**
 
@@ -69,7 +70,7 @@ The bank transaction dataset required transformations to prepare it for analysis
 
 * **Fraud Pattern Recognition**: Identifying minute-level spikes and recurring conditions behind fraud.
 * **Time-Based Analysis**: Comparing fraud volumes across timestamps within a constrained 60-minute window.
-* **Data Visualization**: Crafting a one-page report to deliver insights with filters, charts, and time plots.
+* **Data Visualization**: Crafting a three-page report to deliver insights with filters, charts, and time plots.
 * **Network Insight Correlation**: Integrating 5G metrics (slice ID, latency, bandwidth) into behavioral analysis.
 * **Business Insight Communication**: Transforming raw transactional data into actionable operational knowledge.
 
@@ -82,19 +83,23 @@ The bank transaction dataset required transformations to prepare it for analysis
 
 To understand the overall transaction activity during this specific hour, we can examine several key dimensions:
 
-**i. Which regions processed the most transactions?**
+**i. How many total transactions were recorded?**
+
+A total of **1,000 transactions** were recorded during the one-hour analysis window, with a cumulative transaction value of **771.17K**, reflecting a high volume of activity within a very short time frame.
+
+**ii. Which regions processed the most transactions?**
 
 The geographical distribution of transactions reveals that **Northwest Africa** and **Western Europe** experienced a higher volume of transactions compared to other regions during this hour, as indicated by the size and intensity of the markers on the map.
 
-**ii. Which time intervals within the hour had the most activity?**
+**iii. Which time intervals within the hour had the most activity?**
 
 Analyzing the transaction volume over time shows significant activity between **10:00 AM** and **10:25 AM**, with a notable **peak** of **25** transactions occurring around **10:25 AM**. However, the **highest** number of transactions recorded within this hour was **28**, occurring at approximately **10:55 AM**.
 
-**iii. What is the distribution of transaction statuses (e.g., success vs. failed)?**
+**iv. What is the distribution of transaction statuses (e.g., success vs. failed)?**
 
 The transaction status breakdown indicates a near balance between outcomes within this hour. There were a total of **513 failed transactions** and **487 successful transactions**. This relatively high number of failed transactions warrants further investigation.
 
-**iv. Are certain transaction types more common or rare?**
+**v. Are certain transaction types more common or rare?**
 
 Examining the types of transactions reveals that **Transfer** transactions were the most prevalent, accounting for **37.84%** of all transactions. This was closely followed by **Deposits at 32.68%**, while **Withdrawals** were the least common at **29.48%**. The dominance of *transfer* transactions could be a significant factor to consider in further analysis.
 
@@ -112,7 +117,7 @@ Out of the **1,000** total transactions recorded during this hour, **481(48.1%) 
 
 **ii. Which regions have the highest fraud flag rate?**
 
-The geographical distribution of flagged transactions indicates that **Northwest Africa, Western Europe, and South East Asia experienced a higher concentration of potentially fraudulent activity** during this hour, as evidenced by the clustering of points in these regions on the map.
+The geographical distribution of flagged transactions indicates that **Northwest Africa, Western Europe, Eastern North America, and South East Asia experienced a higher concentration of potentially fraudulent activity** during this hour, as evidenced by the clustering of points in these regions on the map.
 
 **iii. Do specific transaction types or statuses correlate with fraud?**
 
@@ -123,19 +128,23 @@ Further examining the status of these fraudulent transactions:
 * Among the **successful transactions** that were flagged as fraud (totaling **231 with a value of 182.94K)**, **Transfers** again led at **39.59%**, followed by **Deposits at 32.54%**, and **Withdrawals at 27.87%.**
 * For the **failed transactions** that were flagged as fraud (totaling **250 with a value of 195.92K)**, **Deposits** had the **highest percentage at 36%**, followed by **Transfers at 32.13%**, and **Withdrawals at 31.87%.**
 
-This suggests that while transfers are generally more prone to being flagged as fraudulent when successful, deposits show a higher rate of being flagged as fraudulent when they fail, potentially due to detection mechanisms at play.
+This suggests that while **transfers** are generally more prone to being **flagged as fraudulent when successful**, **deposits** show a higher rate of being **flagged as fraudulent when they fail**, potentially due to detection mechanisms at play.
 
 **iv. Are fraud-flagged transactions more common in certain network slices or bandwidth levels?**
 
-* **By Bandwidth**:
-  * Fraudulent activity was highest within the **150–250 Mbps bandwidth range**, accounting for **228 fraudulent transactions** in total.
-    * **Failed**: 111
-    * **Successful**: 117
+ **1. By Bandwidth (150–250 Mbps):** 
+This bandwidth range showed the **highest concentration of fraudulent activity**, with a total of **228 flagged transactions**.
 
-* **By Network Slice**:
-  * **Slice 2** was the most affected, with **173 fraudulent transactions**.
-    * **Failed**: 92
-    * **Successful**: 81
+  * **111 of these attempts failed**, indicating that some fraud detection or transaction-blocking mechanisms were partially effective.
+  * **117 fraudulent transactions were successful**, suggesting that nearly **half of the activity in this high-risk bandwidth range bypassed existing controls** a clear 
+    vulnerability point that needs closer monitoring or intervention.
+
+
+  **2. By Network Slice (Slice 2):**
+Network Slice 2 experienced the **greatest fraud exposure**, registering **173 fraudulent transactions** overall.
+
+* **92 of these were failed attempts**, showing signs of detection or disruption before completion.
+* However, **81 fraudulent transactions went through successfully**, highlighting potential weaknesses in security measures specific to this slice or how it's provisioned and monitored in real-time.
 
 This indicates certain infrastructure layers (like **Slice 2** or bandwidth range **150–250 Mbps**) may be more vulnerable or less monitored, making them preferred channels for fraud. 
 
@@ -167,7 +176,7 @@ The data suggests that fraudulent activity within this hour was **not consistent
 
 ## **Conclusion**
 
-This one-hour snapshot of transactional activity on **17th January 2025** offers a concentrated view into the dynamic landscape of real-time banking operations. Out of **1,000** transactions, nearly **half (48.1%) were flagged as fraudulent** indicating a significant exposure to risk within just 60 minutes. Patterns emerged across **regions**, **transaction types**, **network slices**, and **bandwidth levels**, highlighting concentrations of fraudulent activity in **Northwest Africa, Western Europe, and South Asia**.
+This one-hour transactional activity on **17th January 2025** offers a concentrated view into the dynamic landscape of real-time banking operations. Out of **1,000** transactions, nearly **half (48.1%) were flagged as fraudulent** indicating a significant exposure to risk within just 60 minutes. Patterns emerged across **regions**, **transaction types**, **network slices**, and **bandwidth levels**, highlighting concentrations of fraudulent activity in **Northwest Africa, Western Europe, and South Asia**.
 
 Transfers were the most frequently exploited transaction type in fraud cases, especially among successful transactions. Spikes in fraudulent activity aligned with specific minutes in the hour suggesting deliberate, time-targeted actions. Additionally, **Network Slice 2** and **bandwidths between 150–250 Mbps** surfaced as common attributes in fraudulent behavior.
 
